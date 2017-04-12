@@ -1,0 +1,6 @@
+---
+- name: Vagrant ansible
+  hosts: localhost
+  roles:
+    - { role: galaxy/geerlingguy.repo-epel, become: yes }
+    - { role: galaxy/geerlingguy.nodejs, become: yes }
