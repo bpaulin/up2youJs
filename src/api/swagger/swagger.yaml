@@ -2,29 +2,89 @@ swagger: "2.0"
 info:
   version: "0.0.1"
   title: Hello World App
-# during dev, should point to your local machine
 host: localhost:10010
-# basePath prefixes all resource paths 
 basePath: /
-# 
 schemes:
-  # tip: remove http to make production-grade
   - http
   - https
-# format of bodies a client can send (Content-Type)
 consumes:
   - application/json
-# format of the responses to the client (Accepts)
 produces:
   - application/json
+securityDefinitions:
+  APIKey:
+    description: "Acces"
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
 paths:
+  /login:
+    x-swagger-router-controller: login
+    post:
+      description: Return JWT token
+      tags:
+        - security
+        - debug
+      operationId: login
+      parameters:
+        - name: credentials
+          in: body
+          required: true
+          description: Credentials to login
+          schema: 
+            required:
+              - role
+            properties:
+              role:
+                type: string
+                enum:
+                  - admin
+                  - voter
+                  - proposer
+                  - chooser
+      responses:
+        "200":
+          description: Success
+          schema:
+            required:
+              - token
+            properties:
+              token:
+                type: string
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /protected/admin:
+    x-swagger-router-controller: protected
+    get:
+      operationId: admin 
+      security:
+        - APIKey: []    
+      x-security-roles:
+        - admin
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    
   /hello:
     # binds a127 app logic to a route
     x-swagger-router-controller: hello_world
     get:
       description: Returns 'Hello' to the caller
+      tags:
+        - debug
       # used as the method name of the controller
-      operationId: hello
+      operationId: hello 
       parameters:
         - name: name
           in: query
@@ -45,7 +105,6 @@ paths:
             $ref: "#/definitions/ErrorResponse"
   /swagger:
     x-swagger-pipe: swagger_raw
-# complex objects have schema definitions
 definitions:
   HelloWorldResponse:
     required:
