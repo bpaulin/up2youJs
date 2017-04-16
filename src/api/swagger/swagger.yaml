@@ -1,3 +1,4 @@
+
 swagger: "2.0"
 info:
   version: "0.0.1"
@@ -11,9 +12,12 @@ consumes:
   - application/json
 produces:
   - application/json
+tags:
+  - name: proposer
+    description: for family and friends
 securityDefinitions:
   APIKey:
-    description: "Acces"
+    description: "Access"
     type: "apiKey"
     name: "Authorization"
     in: "header"
@@ -55,6 +59,67 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /proposition:
+    x-swagger-router-controller: proposition
+    post:
+      description: Send a new proposition
+      tags:
+        - proposer
+      security:
+        - APIKey: []    
+      x-security-roles:
+        - proposer
+      operationId: add
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema: 
+            $ref: "#/definitions/PropositionRequest"
+      responses:
+        "204":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    get:
+      description: Basic informations about recent propositions
+      tags:
+        - proposer
+      security:
+        - APIKey: []    
+      x-security-roles:
+        - proposer
+      operationId: dashboard
+      responses:
+        "200":
+          description: Success
+          schema:
+            properties:
+              total:
+                type: integer
+                description: total number of propositions
+              ratio:
+                type: number
+                description: "0 if only girls, 1 if only boys"
+              last:
+                type: object
+                properties:
+                  male:
+                    type: array
+                    description: last male proposition
+                    items:
+                      type: string
+                      maxItems: 3
+                  female:
+                    type: array
+                    description: last female proposition
+                    items:
+                      type: string
+                      maxItems: 3
   /protected/admin:
     x-swagger-router-controller: protected
     get:
@@ -63,6 +128,8 @@ paths:
         - APIKey: []    
       x-security-roles:
         - admin
+      tags:
+        - debug
       responses:
         "200":
           description: Success
@@ -75,7 +142,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-    
   /hello:
     # binds a127 app logic to a route
     x-swagger-router-controller: hello_world
@@ -118,3 +184,22 @@ definitions:
     properties:
       message:
         type: string
+  SuccessResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  PropositionRequest:
+    required:
+      - name
+      - sex
+    properties:
+      name:
+        type: string
+      sex:
+        type: string
+        enum:
+          - male
+          - female
+      
