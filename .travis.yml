@@ -3,6 +3,7 @@ node_js:
   - "6"
 install:
   - cd src
+  - npm install -g swagger
   - npm install
 script:
   - npm test
