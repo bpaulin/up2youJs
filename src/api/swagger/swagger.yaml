@@ -62,6 +62,7 @@ paths:
   /proposition:
     x-swagger-router-controller: proposition
     post:
+      operationId: add
       description: Send a new proposition
       tags:
         - proposer
@@ -69,7 +70,6 @@ paths:
         - APIKey: []    
       x-security-roles:
         - proposer
-      operationId: add
       parameters:
         - name: body
           in: body
@@ -87,13 +87,13 @@ paths:
             $ref: "#/definitions/ErrorResponse"
     get:
       description: Basic informations about recent propositions
+      operationId: dashboard
       tags:
         - proposer
       security:
         - APIKey: []    
       x-security-roles:
         - proposer
-      operationId: dashboard
       responses:
         "200":
           description: Success

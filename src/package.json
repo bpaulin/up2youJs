@@ -11,6 +11,7 @@
     "cors": "^2.8.3",
     "express": "^4.12.3",
     "jsonwebtoken": "^7.3.0",
+    "mongoose": "~3.6.13",
     "swagger-express-mw": "^0.1.0",
     "underscore": "^1.8.3"
   },
@@ -19,8 +20,9 @@
     "supertest": "^1.0.0"
   },
   "scripts": {
-    "start": "node app.js",
+    "start": "swagger project start",
     "verify": "swagger project verify",
-    "test": "swagger project test"
+    "test": "swagger project test",
+    "edit": "swagger project edit -s -p 40000 --host 0.0.0.0"
   }
 }

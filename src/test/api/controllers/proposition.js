@@ -12,4 +12,12 @@ describe('proposition', function () {
 
   });
 
+  describe('POST /proposition', function () {
+
+    xit('should work', function (done) {
+      done();
+    });
+
+  });
+
 });

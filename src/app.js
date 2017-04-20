@@ -10,6 +10,12 @@ var parameters = require('./parameters');
 app.use(cors());
 module.exports = app; // for testing
 
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test');
+mongoose.connection.on('error',function (err) {
+  console.log('Mongoose default connection error: ' + err);
+});
+
 var config = {
   appRoot: __dirname, // required config
   swaggerSecurityHandlers: {
